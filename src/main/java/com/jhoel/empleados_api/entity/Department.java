@@ -16,5 +16,5 @@ public class Department {
 
     private String name;
 
-    private String location;
+    private String officeLocation;
 }
