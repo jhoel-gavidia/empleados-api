@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeparmentRequest {
+public class DepartmentRequest {
     private String name;
     private String officeLocation;
 }
