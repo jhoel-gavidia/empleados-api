@@ -1,7 +1,13 @@
 package com.jhoel.empleados_api.dto.request;
 
-public class DeparmentRequest {
+import lombok.*;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class DeparmentRequest {
     private String name;
     private String officeLocation;
 }
