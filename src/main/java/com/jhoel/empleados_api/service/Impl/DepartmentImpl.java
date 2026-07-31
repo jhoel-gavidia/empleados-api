@@ -4,6 +4,7 @@ import com.jhoel.empleados_api.dto.request.DepartmentRequest;
 import com.jhoel.empleados_api.dto.response.DepartmentResponse;
 import com.jhoel.empleados_api.entity.Department;
 import com.jhoel.empleados_api.exception.AlreadyExistsException;
+import com.jhoel.empleados_api.exception.NotFoundException;
 import com.jhoel.empleados_api.mapper.DepartmentMapper;
 import com.jhoel.empleados_api.repository.DepartmentRepository;
 import com.jhoel.empleados_api.service.Interfaces.DepartmentService;
@@ -32,5 +33,13 @@ public class DepartmentImpl implements DepartmentService {
         return departmentMapper.toResponse(savedDepartment);
     }
 
+    @Override
+    public DepartmentResponse getDepartmentById(Long id) {
+        Department department = departmentRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Department  Not Found with id " + id)
+        );
+
+        return departmentMapper.toResponse(department);
+    }
 
 }
