@@ -7,10 +7,7 @@ import com.jhoel.empleados_api.service.Interfaces.DepartmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -31,5 +28,12 @@ public class DepartmentController {
         URI location =  URI.create("/api/departments/" + response.getId());
 
         return ResponseEntity.created(location).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DepartmentResponse> getDepartmentById(@PathVariable Long id){
+        DepartmentResponse response = departmentService.getDepartmentById(id);
+
+        return ResponseEntity.ok(response);
     }
 }
