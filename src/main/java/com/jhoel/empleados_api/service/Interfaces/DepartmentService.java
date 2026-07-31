@@ -6,4 +6,5 @@ import com.jhoel.empleados_api.entity.Department;
 
 public interface DepartmentService {
     public DepartmentResponse createDepartment(DepartmentRequest departmentRequest);
+    public DepartmentResponse getDepartmentById(Long id);
 }
