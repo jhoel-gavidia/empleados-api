@@ -11,6 +11,8 @@ import com.jhoel.empleados_api.service.Interfaces.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class DepartmentImpl implements DepartmentService {
@@ -41,5 +43,15 @@ public class DepartmentImpl implements DepartmentService {
 
         return departmentMapper.toResponse(department);
     }
+
+    @Override
+    public List<DepartmentResponse> getDepartments() {
+
+        return departmentRepository.findAll()
+                .stream()
+                .map(departmentMapper::toResponse)
+                .toList();
+    }
+
 
 }
