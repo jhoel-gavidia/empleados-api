@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/departments")
@@ -34,6 +35,12 @@ public class DepartmentController {
     public ResponseEntity<DepartmentResponse> getDepartmentById(@PathVariable Long id){
         DepartmentResponse response = departmentService.getDepartmentById(id);
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<DepartmentResponse>> getDepartments() {
+        List<DepartmentResponse> response = departmentService.getDepartments();
         return ResponseEntity.ok(response);
     }
 }
