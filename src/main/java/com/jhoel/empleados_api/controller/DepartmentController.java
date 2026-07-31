@@ -43,4 +43,13 @@ public class DepartmentController {
         List<DepartmentResponse> response = departmentService.getDepartments();
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DepartmentResponse> updateDepartment(
+            @PathVariable Long id,
+            @Valid @RequestBody DepartmentRequest departmentRequest
+    ){
+        DepartmentResponse response = departmentService.updateDepartment(id, departmentRequest);
+        return ResponseEntity.ok(response);
+    }
 }
