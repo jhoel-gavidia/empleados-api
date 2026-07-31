@@ -10,4 +10,5 @@ public interface DepartmentService {
     public DepartmentResponse createDepartment(DepartmentRequest departmentRequest);
     public DepartmentResponse getDepartmentById(Long id);
     public List<DepartmentResponse> getDepartments();
+    public DepartmentResponse updateDepartment(Long id, DepartmentRequest departmentRequest);
 }

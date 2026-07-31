@@ -53,5 +53,30 @@ public class DepartmentImpl implements DepartmentService {
                 .toList();
     }
 
+    @Override
+    public DepartmentResponse updateDepartment(Long id, DepartmentRequest departmentRequest) {
+        Department department = departmentRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Department  Not Found with id " + id)
+        );
+
+        boolean exists = departmentRepository
+                .existsByNameAndIdNot(departmentRequest.getName(), id);
+
+        if (exists) {
+            throw new AlreadyExistsException(
+                    "Department with name " + departmentRequest.getName() + " already exists"
+            );
+        }
+
+        department.setName(departmentRequest.getName());
+        department.setOfficeLocation(departmentRequest.getOfficeLocation());
+
+
+        Department savedDepartment = departmentRepository.save(department);
+
+        return departmentMapper.toResponse(savedDepartment);
+
+    }
+
 
 }
