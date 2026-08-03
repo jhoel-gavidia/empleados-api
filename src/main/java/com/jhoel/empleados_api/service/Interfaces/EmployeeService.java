@@ -9,5 +9,5 @@ import java.util.List;
 public interface EmployeeService {
     EmployeeResponse createEmployee(EmployeeRequest employeeRequest);
     EmployeeResponse getEmployeeById(Long id);
-    List<Employee> getEmployees();
+    List<EmployeeResponse> getEmployees();
 }
