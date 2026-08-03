@@ -10,4 +10,5 @@ public interface EmployeeService {
     EmployeeResponse createEmployee(EmployeeRequest employeeRequest);
     EmployeeResponse getEmployeeById(Long id);
     List<EmployeeResponse> getEmployees();
+    EmployeeResponse updateEmployee(Long id, EmployeeRequest employeeRequest);
 }
