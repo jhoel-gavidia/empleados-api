@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -32,5 +33,10 @@ public class EmployeeController {
     public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id) {
 
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EmployeeResponse>> getEmployees() {
+        return ResponseEntity.ok(employeeService.getEmployees());
     }
 }
