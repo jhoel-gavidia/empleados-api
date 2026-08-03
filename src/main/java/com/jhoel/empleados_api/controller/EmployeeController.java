@@ -6,10 +6,7 @@ import com.jhoel.empleados_api.service.Interfaces.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -29,5 +26,11 @@ public class EmployeeController {
         URI location = URI.create("/api/employees/" + response.getId());
 
         return ResponseEntity.created(location).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id) {
+
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 }
