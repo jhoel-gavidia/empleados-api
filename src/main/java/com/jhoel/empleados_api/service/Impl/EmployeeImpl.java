@@ -77,4 +77,12 @@ public class EmployeeImpl implements EmployeeService {
         return employeeMapper.toResponse(employee);
     }
 
+    @Override
+    public void deleteEmployee(Long id) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Employee not found with id:" + id)
+        );
+
+        employeeRepository.delete(employee);
+    }
 }
