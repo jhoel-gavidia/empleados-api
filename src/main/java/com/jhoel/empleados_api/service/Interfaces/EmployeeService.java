@@ -5,4 +5,5 @@ import com.jhoel.empleados_api.dto.response.EmployeeResponse;
 
 public interface EmployeeService {
     EmployeeResponse createEmployee(EmployeeRequest employeeRequest);
+    EmployeeResponse getEmployeeById(Long id);
 }
