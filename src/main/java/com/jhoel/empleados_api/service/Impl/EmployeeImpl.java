@@ -12,6 +12,8 @@ import com.jhoel.empleados_api.service.Interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class EmployeeImpl implements EmployeeService {
@@ -41,6 +43,15 @@ public class EmployeeImpl implements EmployeeService {
         );
 
         return employeeMapper.toResponse(employee);
+    }
+
+    @Override
+    public List<EmployeeResponse> getEmployees() {
+
+        return employeeRepository.findAll()
+                .stream()
+                .map(employeeMapper::toResponse)
+                .toList();
     }
 
 }
