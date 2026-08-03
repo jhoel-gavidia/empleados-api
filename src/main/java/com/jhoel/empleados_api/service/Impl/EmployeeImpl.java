@@ -54,4 +54,27 @@ public class EmployeeImpl implements EmployeeService {
                 .toList();
     }
 
+    @Override
+    public EmployeeResponse updateEmployee(Long id, EmployeeRequest employeeRequest) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Employee not found with id:" + id)
+        );
+
+        Department department = departmentRepository.findById(employeeRequest.getDepartmentId()).orElseThrow(
+                () -> new NotFoundException("Department not found with id:" + employeeRequest.getDepartmentId())
+        );
+
+        employee.setFirstName(employeeRequest.getFirstName());
+        employee.setLastName(employeeRequest.getLastName());
+        employee.setEmail(employeeRequest.getEmail());
+        employee.setBirthDate(employeeRequest.getBirthDate());
+        employee.setPhoneNumber(employeeRequest.getPhoneNumber());
+        employee.setSalary(employeeRequest.getSalary());
+        employee.setDepartment(department);
+
+        employeeRepository.save(employee);
+
+        return employeeMapper.toResponse(employee);
+    }
+
 }
