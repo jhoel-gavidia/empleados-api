@@ -2,9 +2,10 @@ package com.jhoel.empleados_api.mapper;
 
 import com.jhoel.empleados_api.dto.request.EmployeeRequest;
 import com.jhoel.empleados_api.dto.response.EmployeeResponse;
-import com.jhoel.empleados_api.entity.Department;
 import com.jhoel.empleados_api.entity.Employee;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmployeeMapper {
 
     public Employee toEntity(EmployeeRequest employeeRequest) {
