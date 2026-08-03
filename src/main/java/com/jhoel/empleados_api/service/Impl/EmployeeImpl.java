@@ -34,4 +34,13 @@ public class EmployeeImpl implements EmployeeService {
         return employeeMapper.toResponse(savedEmployee);
     }
 
+    @Override
+    public EmployeeResponse getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Employee not found with id:" + id)
+        );
+
+        return employeeMapper.toResponse(employee);
+    }
+
 }
