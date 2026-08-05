@@ -5,6 +5,8 @@ import com.jhoel.empleados_api.dto.response.EmployeeResponse;
 import com.jhoel.empleados_api.service.Interfaces.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +38,8 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeResponse>> getEmployees() {
-        return ResponseEntity.ok(employeeService.getEmployees());
+    public ResponseEntity<Page<EmployeeResponse>> getEmployees(Pageable pageable) {
+        return ResponseEntity.ok(employeeService.getEmployees(pageable));
     }
 
     @PutMapping("/{id}")

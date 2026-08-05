@@ -10,6 +10,8 @@ import com.jhoel.empleados_api.repository.DepartmentRepository;
 import com.jhoel.empleados_api.repository.EmployeeRepository;
 import com.jhoel.empleados_api.service.Interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,12 +48,10 @@ public class EmployeeImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeResponse> getEmployees() {
+    public Page<EmployeeResponse> getEmployees(Pageable pageable) {
 
-        return employeeRepository.findAll()
-                .stream()
-                .map(employeeMapper::toResponse)
-                .toList();
+        return employeeRepository.findAll(pageable)
+                .map(employeeMapper::toResponse);
     }
 
     @Override
