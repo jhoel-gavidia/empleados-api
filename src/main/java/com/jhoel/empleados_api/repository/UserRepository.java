@@ -14,6 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     from User u
     Where u.username = :identifier
     Or u.email = :identifier
-    """)
-    Optional<User> findByUsernameOrEmail(@Param("indentifier") String identifier);
+""")
+    Optional<User> findByUsernameOrEmail(@Param("identifier") String identifier);
 }
