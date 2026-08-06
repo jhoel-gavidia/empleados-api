@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
@@ -54,5 +55,15 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Page<EmployeeResponse>> filterEmployee(@RequestParam(required = false) String name,
+                                                                 @RequestParam(required = false) Long departmentId,
+                                                                 @RequestParam(required = false) BigDecimal maxSalary,
+                                                                 @RequestParam(required = false) BigDecimal minSalary,
+                                                                 Pageable pageable)
+    {
+        return ResponseEntity.ok(employeeService.filterEmployee(name, departmentId, maxSalary, minSalary, pageable));
     }
 }

@@ -5,7 +5,7 @@ import com.jhoel.empleados_api.dto.response.EmployeeResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 public interface EmployeeService {
     EmployeeResponse createEmployee(EmployeeRequest employeeRequest);
@@ -13,4 +13,10 @@ public interface EmployeeService {
     Page<EmployeeResponse> getEmployees(String name, Pageable pageable);
     EmployeeResponse updateEmployee(Long id, EmployeeRequest employeeRequest);
     void deleteEmployee(Long id);
+    Page<EmployeeResponse> filterEmployee(
+            String name,
+            Long id,
+            BigDecimal maxSalary,
+            BigDecimal minSalary,
+            Pageable pageable);
 }

@@ -1,5 +1,6 @@
 package com.jhoel.empleados_api.service.Impl;
 
+import com.jhoel.empleados_api.Specification.EmployeeSpecification;
 import com.jhoel.empleados_api.dto.request.EmployeeRequest;
 import com.jhoel.empleados_api.dto.response.EmployeeResponse;
 import com.jhoel.empleados_api.entity.Department;
@@ -12,8 +13,10 @@ import com.jhoel.empleados_api.service.Interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -91,5 +94,47 @@ public class EmployeeImpl implements EmployeeService {
         );
 
         employeeRepository.delete(employee);
+    }
+
+    @Override
+    public Page<EmployeeResponse> filterEmployee(String name,
+                                                 Long departmentId,
+                                                 BigDecimal maxSalary,
+                                                 BigDecimal minSalary,
+                                                 Pageable pageable) {
+
+        Specification<Employee> spec = buildEmployeeSpecification(name, departmentId, maxSalary, minSalary);
+
+        return  employeeRepository.findAll(spec, pageable)
+                .map(employeeMapper::toResponse);
+
+    }
+
+    private Specification<Employee> buildEmployeeSpecification(String name,
+                                                  Long departmentId,
+                                                  BigDecimal maxSalary,
+                                                  BigDecimal minSalary) {
+
+        Specification<Employee> spec = Specification.unrestricted();
+
+        if(name != null && !name.isBlank()) {
+            spec = spec.and(EmployeeSpecification.hasName(name));
+        }
+
+        if(departmentId != null) {
+            spec = spec.and((EmployeeSpecification.hasDepartment(departmentId)));
+        }
+
+        if(maxSalary != null) {
+            spec = spec.and(EmployeeSpecification.salaryLessThan(maxSalary));
+        }
+
+        if(minSalary != null) {
+            spec = spec.and(EmployeeSpecification.salaryGreaterThan(minSalary));
+        }
+
+
+
+        return spec;
     }
 }
