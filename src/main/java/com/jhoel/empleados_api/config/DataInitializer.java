@@ -22,6 +22,7 @@ public class DataInitializer {
             if(userRepository.findByUsernameOrEmail("email").isEmpty()) {
                 User admin = User.builder()
                         .username("admin")
+                        .email("admin@gmail.com")
                         .password(passwordEncoder.encode("admin123"))
                         .role(Role.ADMIN)
                         .build();
