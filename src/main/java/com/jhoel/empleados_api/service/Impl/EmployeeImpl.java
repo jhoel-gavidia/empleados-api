@@ -48,10 +48,17 @@ public class EmployeeImpl implements EmployeeService {
     }
 
     @Override
-    public Page<EmployeeResponse> getEmployees(Pageable pageable) {
+    public Page<EmployeeResponse> getEmployees(String name, Pageable pageable) {
+        Page<Employee> employees;
 
-        return employeeRepository.findAll(pageable)
-                .map(employeeMapper::toResponse);
+        if(name == null || name.isBlank()) {
+            employees = employeeRepository.findAll(pageable);
+
+        } else {
+            employees = employeeRepository.findByFirstNameContainingIgnoreCase(name, pageable);
+        }
+
+        return employees.map(employeeMapper::toResponse);
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 public interface EmployeeService {
     EmployeeResponse createEmployee(EmployeeRequest employeeRequest);
     EmployeeResponse getEmployeeById(Long id);
-    Page<EmployeeResponse> getEmployees(Pageable pageable);
+    Page<EmployeeResponse> getEmployees(String name, Pageable pageable);
     EmployeeResponse updateEmployee(Long id, EmployeeRequest employeeRequest);
     void deleteEmployee(Long id);
 }

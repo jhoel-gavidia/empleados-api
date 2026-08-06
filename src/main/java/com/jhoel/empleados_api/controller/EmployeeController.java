@@ -38,8 +38,8 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<EmployeeResponse>> getEmployees(Pageable pageable) {
-        return ResponseEntity.ok(employeeService.getEmployees(pageable));
+    public ResponseEntity<Page<EmployeeResponse>> getEmployees(@RequestParam(required = false) String name, Pageable pageable) {
+        return ResponseEntity.ok(employeeService.getEmployees(name, pageable));
     }
 
     @PutMapping("/{id}")
