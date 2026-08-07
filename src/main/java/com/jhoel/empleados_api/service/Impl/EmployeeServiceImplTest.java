@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -450,5 +451,64 @@ public class EmployeeServiceImplTest {
 
         verify(employeeRepository).findById(employeeId);
         verify(employeeRepository, never()).delete(any(Employee.class));
+    }
+
+    @Test
+    void shouldFilterEmployeesSuccessfully() {
+
+        String name = "John";
+        Long departmentId = 1L;
+        BigDecimal minSalary = new BigDecimal("3000");
+        BigDecimal maxSalary = new BigDecimal("5000");
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Employee employee = Employee.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@gmail.com")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        Page<Employee> employeePage =
+                new PageImpl<>(List.of(employee), pageable, 1);
+
+        when(employeeRepository.findAll(
+                any(Specification.class),
+                eq(pageable)
+        )).thenReturn(employeePage);
+
+        EmployeeResponse employeeResponse = EmployeeResponse.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@gmail.com")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        when(employeeMapper.toResponse(employee))
+                .thenReturn(employeeResponse);
+
+        Page<EmployeeResponse> result =
+                employeeServiceImpl.filterEmployee(
+                        name,
+                        departmentId,
+                        maxSalary,
+                        minSalary,
+                        pageable
+                );
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals(1, result.getContent().size());
+        assertEquals("John", result.getContent().get(0).getFirstName());
+        assertEquals("Doe", result.getContent().get(0).getLastName());
+        assertEquals(new BigDecimal("3500"), result.getContent().get(0).getSalary());
+
+        verify(employeeRepository).findAll(
+                any(Specification.class),
+                eq(pageable)
+        );
+        verify(employeeMapper).toResponse(employee);
     }
 }
