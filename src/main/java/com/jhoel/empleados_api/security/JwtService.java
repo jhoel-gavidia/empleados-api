@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 import com.jhoel.empleados_api.entity.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import javax.crypto.SecretKey;
@@ -51,5 +52,11 @@ public class JwtService {
     public String extractUsername(String jwt) {
         return extractAllClaims(jwt)
                 .getSubject();
+    }
+
+    public boolean isTokenValid(String jwt, UserDetails userDetails) {
+        return extractAllClaims(jwt)
+                .getExpiration()
+                .before(new Date());
     }
 }
