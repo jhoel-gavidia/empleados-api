@@ -4,6 +4,7 @@ import com.jhoel.empleados_api.dto.request.EmployeeRequest;
 import com.jhoel.empleados_api.dto.response.EmployeeResponse;
 import com.jhoel.empleados_api.entity.Department;
 import com.jhoel.empleados_api.entity.Employee;
+import com.jhoel.empleados_api.exception.NotFoundException;
 import com.jhoel.empleados_api.mapper.EmployeeMapper;
 import com.jhoel.empleados_api.repository.DepartmentRepository;
 import com.jhoel.empleados_api.repository.EmployeeRepository;
@@ -18,8 +19,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceImplTest {
@@ -97,5 +98,29 @@ public class EmployeeServiceImplTest {
         verify(employeeMapper).toEntity(employeeRequest);
         verify(employeeRepository).save(employee);
         verify(employeeMapper).toResponse(employee);
+    }
+
+    @Test
+    void shouldDepartmentDoesNotExist() {
+
+        EmployeeRequest employeeRequest = new EmployeeRequest();
+
+        employeeRequest.setFirstName("John");
+        employeeRequest.setLastName("Doe");
+        employeeRequest.setEmail("jhoelgavidia@gmail.com");
+        employeeRequest.setBirthDate(LocalDate.of(2000, 1, 10));
+        employeeRequest.setPhoneNumber("999999999");
+        employeeRequest.setSalary(new BigDecimal("3500"));
+        employeeRequest.setDepartmentId(99L);
+
+        when(departmentRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                NotFoundException.class,
+                () -> employeeServiceImpl.createEmployee(employeeRequest)
+        );
+
+        verify(employeeRepository, never()).save(any(Employee.class));
     }
 }
