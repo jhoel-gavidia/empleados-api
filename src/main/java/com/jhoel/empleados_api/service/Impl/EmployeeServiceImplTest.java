@@ -123,4 +123,62 @@ public class EmployeeServiceImplTest {
 
         verify(employeeRepository, never()).save(any(Employee.class));
     }
+
+    @Test
+    void shouldGetEmployeeByIdisSuccessfully() {
+        Long id = 1L;
+
+        Employee employee = Employee.builder()
+                .id(id)
+                .firstName("John")
+                .lastName("Doe")
+                .email("jhoelgavidia@gmail.com")
+                .birthDate(LocalDate.of(2000, 1, 10))
+                .phoneNumber("999999999")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        EmployeeResponse employeeResponse = EmployeeResponse.builder()
+                .id(id)
+                .firstName("John")
+                .lastName("Doe")
+                .email("jhoelgavidia@gmail.com")
+                .birthDate(LocalDate.of(2000, 1, 10))
+                .phoneNumber("999999999")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        when(employeeRepository.findById(id))
+                .thenReturn(Optional.of(employee));
+
+        when(employeeMapper.toResponse(employee))
+                .thenReturn(employeeResponse);
+
+        EmployeeResponse result = employeeServiceImpl.getEmployeeById(id);
+
+        assertEquals(id, result.getId());
+        assertEquals("John", result.getFirstName());
+        assertEquals("Doe", result.getLastName());
+        assertEquals("jhoelgavidia@gmail.com", result.getEmail());
+
+
+        verify(employeeRepository).findById(id);
+        verify(employeeMapper).toResponse(employee);
+    }
+
+    @Test
+    void shouldEmployyeDoesNotExists() {
+        Long id = 1L;
+
+        when(employeeRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                NotFoundException.class,
+                () -> employeeServiceImpl.getEmployeeById(id)
+        );
+
+        verify(employeeRepository).findById(id);
+        verify(employeeMapper, never()).toResponse(any(Employee.class));
+    }
 }
