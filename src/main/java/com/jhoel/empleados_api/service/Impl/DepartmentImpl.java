@@ -9,6 +9,7 @@ import com.jhoel.empleados_api.mapper.DepartmentMapper;
 import com.jhoel.empleados_api.repository.DepartmentRepository;
 import com.jhoel.empleados_api.service.Interfaces.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class DepartmentImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final DepartmentMapper departmentMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public DepartmentResponse createDepartment(DepartmentRequest departmentRequest) {
         boolean exists = departmentRepository.existsByName(departmentRequest.getName());
@@ -35,6 +37,7 @@ public class DepartmentImpl implements DepartmentService {
         return departmentMapper.toResponse(savedDepartment);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @Override
     public DepartmentResponse getDepartmentById(Long id) {
         Department department = departmentRepository.findById(id).orElseThrow(
@@ -44,6 +47,7 @@ public class DepartmentImpl implements DepartmentService {
         return departmentMapper.toResponse(department);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @Override
     public List<DepartmentResponse> getDepartments() {
 
@@ -53,6 +57,7 @@ public class DepartmentImpl implements DepartmentService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public DepartmentResponse updateDepartment(Long id, DepartmentRequest departmentRequest) {
         Department department = departmentRepository.findById(id).orElseThrow(
@@ -78,6 +83,7 @@ public class DepartmentImpl implements DepartmentService {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void deleteDepartment(Long id) {
         Department department = departmentRepository.findById(id).orElseThrow(

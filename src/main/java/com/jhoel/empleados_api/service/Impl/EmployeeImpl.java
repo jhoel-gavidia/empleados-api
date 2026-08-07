@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class EmployeeImpl implements EmployeeService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeMapper employeeMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
         Department department = departmentRepository.findById(employeeRequest.getDepartmentId()).orElseThrow(
@@ -41,6 +43,7 @@ public class EmployeeImpl implements EmployeeService {
         return employeeMapper.toResponse(savedEmployee);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @Override
     public EmployeeResponse getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(
@@ -50,6 +53,7 @@ public class EmployeeImpl implements EmployeeService {
         return employeeMapper.toResponse(employee);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @Override
     public Page<EmployeeResponse> getEmployees(String name, Pageable pageable) {
         Page<Employee> employees;
@@ -64,6 +68,7 @@ public class EmployeeImpl implements EmployeeService {
         return employees.map(employeeMapper::toResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest employeeRequest) {
         Employee employee = employeeRepository.findById(id).orElseThrow(
@@ -87,6 +92,7 @@ public class EmployeeImpl implements EmployeeService {
         return employeeMapper.toResponse(employee);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void deleteEmployee(Long id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(
@@ -96,6 +102,7 @@ public class EmployeeImpl implements EmployeeService {
         employeeRepository.delete(employee);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @Override
     public Page<EmployeeResponse> filterEmployee(String name,
                                                  Long departmentId,
