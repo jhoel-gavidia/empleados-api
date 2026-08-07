@@ -277,4 +277,137 @@ public class EmployeeServiceImplTest {
         verify(employeeRepository, never())
                 .findAll(pageable);
     }
+
+    @Test
+    void shouldUpdateEmployeeSuccessully() {
+
+        Long employeeId = 1L;
+
+        EmployeeRequest employeeRequest = new EmployeeRequest();
+        employeeRequest.setFirstName("John Updated");
+        employeeRequest.setLastName("Doe Updated");
+        employeeRequest.setEmail("john.updated@gmail.com");
+        employeeRequest.setBirthDate(LocalDate.of(2000, 1, 10));
+        employeeRequest.setPhoneNumber("999999999");
+        employeeRequest.setSalary(new BigDecimal("4000"));
+        employeeRequest.setDepartmentId(2L);
+
+        Employee employee = Employee.builder()
+                .id(employeeId)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@gmail.com")
+                .birthDate(LocalDate.of(2000, 1, 10))
+                .phoneNumber("988888888")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        Department department = Department.builder()
+                .id(2L)
+                .name("Recursos Humanos")
+                .officeLocation("Lima")
+                .build();
+
+        when(employeeRepository.findById(employeeId))
+                .thenReturn(Optional.of(employee));
+
+        when(departmentRepository.findById(2L))
+                .thenReturn(Optional.of(department));
+
+        when(employeeRepository.save(employee))
+                .thenReturn(employee);
+
+        EmployeeResponse employeeResponse = EmployeeResponse.builder()
+                .id(employeeId)
+                .firstName("John Updated")
+                .lastName("Doe Updated")
+                .email("john.updated@gmail.com")
+                .birthDate(LocalDate.of(2000, 1, 10))
+                .phoneNumber("999999999")
+                .salary(new BigDecimal("4000"))
+                .build();
+
+        when(employeeMapper.toResponse(employee))
+                .thenReturn(employeeResponse);
+
+        EmployeeResponse result =
+                employeeServiceImpl.updateEmployee(employeeId, employeeRequest);
+
+        assertEquals("John Updated", employee.getFirstName());
+        assertEquals("Doe Updated", employee.getLastName());
+        assertEquals("john.updated@gmail.com", employee.getEmail());
+        assertEquals(new BigDecimal("4000"), employee.getSalary());
+        assertEquals(department, employee.getDepartment());
+
+        verify(employeeRepository).findById(employeeId);
+        verify(departmentRepository).findById(2L);
+        verify(employeeRepository).save(employee);
+        verify(employeeMapper).toResponse(employee);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmployeeDoesNotExist() {
+
+
+        Long employeeId = 99L;
+
+        EmployeeRequest employeeRequest = new EmployeeRequest();
+        employeeRequest.setFirstName("John");
+        employeeRequest.setLastName("Doe");
+        employeeRequest.setEmail("john@gmail.com");
+        employeeRequest.setDepartmentId(1L);
+
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+
+        assertThrows(
+                NotFoundException.class,
+                () -> employeeServiceImpl.updateEmployee(
+                        employeeId,
+                        employeeRequest
+                )
+        );
+
+        verify(employeeRepository).findById(employeeId);
+        verify(departmentRepository, never()).findById(anyLong());
+        verify(employeeRepository, never()).save(any(Employee.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDepartmentDoesNotExist() {
+
+        Long employeeId = 1L;
+
+        EmployeeRequest employeeRequest = new EmployeeRequest();
+        employeeRequest.setFirstName("John Updated");
+        employeeRequest.setLastName("Doe Updated");
+        employeeRequest.setEmail("john.updated@gmail.com");
+        employeeRequest.setBirthDate(LocalDate.of(2000, 1, 10));
+        employeeRequest.setPhoneNumber("999999999");
+        employeeRequest.setSalary(new BigDecimal("4000"));
+        employeeRequest.setDepartmentId(99L);
+
+        Employee employee = Employee.builder()
+                .id(employeeId)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@gmail.com")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+
+        when(departmentRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(
+                NotFoundException.class,
+                () -> employeeServiceImpl.updateEmployee(
+                        employeeId,
+                        employeeRequest
+                )
+        );
+
+        verify(employeeRepository).findById(employeeId);
+        verify(departmentRepository).findById(99L);
+        verify(employeeRepository, never()).save(any(Employee.class));
+    }
 }
