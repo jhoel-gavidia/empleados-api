@@ -38,4 +38,7 @@ public class JwtService {
     private SecretKey getKey() {
         return  Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
+
+    public String extractUsername(String jwt) {
+    }
 }
