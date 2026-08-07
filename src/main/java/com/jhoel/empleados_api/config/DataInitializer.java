@@ -1,3 +1,4 @@
+
 package com.jhoel.empleados_api.config;
 
 import com.jhoel.empleados_api.entity.Role;
@@ -12,23 +13,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class DataInitializer {
-
+    /*
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    @Bean
+   CommandLineRunner initDatabase() {
+        return  args -> {
+         if(userRepository.findByUsernameOrEmail("email").isEmpty()) {
+              User user = User.builder()
+    .username("jhoel")
+            .email("jhoel@test.com")
+    .password(passwordEncoder.encode("123456"))
+           .role(Role.USER)
+           .build();
 
-   // @Bean
-    // CommandLineRunner initDatabase() {
-    //    return  args -> {
-   //       if(userRepository.findByUsernameOrEmail("email").isEmpty()) {
-    //           User admin = User.builder()
-    //                   .username("admin")
-    //                   .email("admin@gmail.com")
-    //                  .password(passwordEncoder.encode("admin123"))
-    //                  .role(Role.ADMIN)
-    //                 .build();
-//
-    //         userRepository.save(admin);
-    //       }
-    //   };
-    // }
+    userRepository.save(user);
+
+         }
+       };
+     }
+     */
 }
