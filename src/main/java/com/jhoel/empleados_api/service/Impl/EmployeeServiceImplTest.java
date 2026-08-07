@@ -13,9 +13,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -180,5 +185,96 @@ public class EmployeeServiceImplTest {
 
         verify(employeeRepository).findById(id);
         verify(employeeMapper, never()).toResponse(any(Employee.class));
+    }
+
+    @Test
+    void shouldGetEmployeeWithoutFilter() {
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Employee employee = Employee.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("jhoelgavidia@gmail.com")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        Page<Employee> employeePage =
+                new PageImpl<>(List.of(employee), pageable, 1);
+
+        when(employeeRepository.findAll(pageable))
+                .thenReturn(employeePage);
+
+        EmployeeResponse employeeResponse = EmployeeResponse.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("jhoelgavidia@gmail.com")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        when(employeeMapper.toResponse(employee))
+                .thenReturn(employeeResponse);
+
+        Page<EmployeeResponse> result =
+                employeeServiceImpl.getEmployees(null, pageable);
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals(1, result.getContent().size());
+        assertEquals("John", result.getContent().get(0).getFirstName());
+        assertEquals("Doe", result.getContent().get(0).getLastName());
+
+        verify(employeeRepository).findAll(pageable);
+        verify(employeeRepository, never())
+                .findByFirstNameContainingIgnoreCase(anyString(), any(Pageable.class));
+    }
+
+    @Test
+    void shouldGetEmployeeByName() {
+        String name = "John";
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Employee employee = Employee.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("jhoelgavidia@gmail.com")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        Page<Employee> employeePage =
+                new PageImpl<>(List.of(employee), pageable, 1);
+
+        when(employeeRepository.findByFirstNameContainingIgnoreCase(
+                name, pageable
+        )).thenReturn(employeePage);
+
+        EmployeeResponse employeeResponse = EmployeeResponse.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("jhoelgavidia@gmail.com")
+                .salary(new BigDecimal("3500"))
+                .build();
+
+        when(employeeMapper.toResponse(employee))
+                .thenReturn(employeeResponse);
+
+
+        Page<EmployeeResponse> result =
+                employeeServiceImpl.getEmployees(name, pageable);
+
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals("John", result.getContent().get(0).getFirstName());
+        assertEquals("Doe", result.getContent().get(0).getLastName());
+
+
+        verify(employeeRepository)
+                .findByFirstNameContainingIgnoreCase(name, pageable);
+
+        verify(employeeRepository, never())
+                .findAll(pageable);
     }
 }
