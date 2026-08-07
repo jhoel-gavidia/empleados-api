@@ -410,4 +410,45 @@ public class EmployeeServiceImplTest {
         verify(departmentRepository).findById(99L);
         verify(employeeRepository, never()).save(any(Employee.class));
     }
+
+    @Test
+    void shouldDeleteEmployeeSuccessfully() {
+
+        Long employeeId = 1L;
+
+        Employee employee = Employee.builder()
+                .id(employeeId)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@gmail.com")
+                .build();
+
+        when(employeeRepository.findById(employeeId))
+                .thenReturn(Optional.of(employee));
+
+
+        employeeServiceImpl.deleteEmployee(employeeId);
+
+
+        verify(employeeRepository).findById(employeeId);
+        verify(employeeRepository).delete(employee);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmployeeDoesNotExistOnDelete() {
+
+        Long employeeId = 99L;
+
+        when(employeeRepository.findById(employeeId))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                NotFoundException.class,
+                () -> employeeServiceImpl.deleteEmployee(employeeId)
+        );
+
+        verify(employeeRepository).findById(employeeId);
+        verify(employeeRepository, never()).delete(any(Employee.class));
+    }
 }
