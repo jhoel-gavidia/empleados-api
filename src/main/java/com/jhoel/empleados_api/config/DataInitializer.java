@@ -16,19 +16,19 @@ public class DataInitializer {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Bean
-    CommandLineRunner initDatabase() {
-        return  args -> {
-            if(userRepository.findByUsernameOrEmail("email").isEmpty()) {
-                User admin = User.builder()
-                        .username("admin")
-                        .email("admin@gmail.com")
-                        .password(passwordEncoder.encode("admin123"))
-                        .role(Role.ADMIN)
-                        .build();
-
-                userRepository.save(admin);
-            }
-        };
-    }
+   // @Bean
+    // CommandLineRunner initDatabase() {
+    //    return  args -> {
+   //       if(userRepository.findByUsernameOrEmail("email").isEmpty()) {
+    //           User admin = User.builder()
+    //                   .username("admin")
+    //                   .email("admin@gmail.com")
+    //                  .password(passwordEncoder.encode("admin123"))
+    //                  .role(Role.ADMIN)
+    //                 .build();
+//
+    //         userRepository.save(admin);
+    //       }
+    //   };
+    // }
 }
