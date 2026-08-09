@@ -3,6 +3,7 @@ package com.jhoel.empleados_api.controller;
 import com.jhoel.empleados_api.dto.request.EmployeeRequest;
 import com.jhoel.empleados_api.dto.response.EmployeeResponse;
 import com.jhoel.empleados_api.service.Interfaces.EmployeeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class EmployeeController {
 
