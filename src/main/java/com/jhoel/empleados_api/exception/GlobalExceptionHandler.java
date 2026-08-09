@@ -41,12 +41,16 @@ public class GlobalExceptionHandler {
                         )
                 );
 
-        ValidationErrorResponse response = new ValidationErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                errors
-        );
+        ValidationErrorResponse response =
+                new ValidationErrorResponse(
+                        HttpStatus.BAD_REQUEST.value(),
+                        errors
+                );
 
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -59,6 +63,9 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.value()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.NOT_FOUND
+        );
     }
 }
