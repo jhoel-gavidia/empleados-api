@@ -18,6 +18,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -510,5 +512,14 @@ public class EmployeeServiceImplTest {
                 eq(pageable)
         );
         verify(employeeMapper).toResponse(employee);
+    }
+
+    @Test
+    void generatePassword() {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        System.out.println(
+                encoder.encode("admin123")
+        );
     }
 }
