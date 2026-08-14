@@ -1,11 +1,15 @@
 package com.jhoel.empleados_api.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,9 +39,18 @@ public class DepartmentIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @BeforeEach
+    void limpiarContextoSeguridad() {
+        SecurityContextHolder.clearContext();
+    }
+
+    @AfterEach
+    void limpiarContextoSeguridadDespues() {
+        SecurityContextHolder.clearContext();
+    }
 
     @Test
+    @Order(1)
     @WithMockUser
     void getDepartmentById_404() throws Exception {
 
@@ -46,6 +59,7 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
+    @Order(2)
     @WithMockUser(roles = "ADMIN")
     void createDepartment_shouldPersistDepartment() throws Exception {
 
@@ -73,6 +87,7 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
+    @Order(3)
     void getDepartmentById_401() throws Exception {
 
         mockMvc.perform(get("/api/departments/1"))
@@ -81,6 +96,7 @@ public class DepartmentIntegrationTest {
 
 
     @Test
+    @Order(4)
     @WithMockUser(roles = "USER")
     void createDepartment_403() throws Exception {
 
