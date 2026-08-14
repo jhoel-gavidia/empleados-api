@@ -79,6 +79,7 @@ public class DepartmentIntegrationTest {
                 .andExpect(status().isUnauthorized());
     }
 
+
     @Test
     @WithMockUser(roles = "USER")
     void createDepartment_403() throws Exception {
