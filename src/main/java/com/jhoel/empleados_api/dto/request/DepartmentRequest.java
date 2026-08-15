@@ -13,6 +13,7 @@ public class DepartmentRequest {
     @NotBlank(message = "Name is required")
     private String name;
 
+
     @NotBlank(message = "Location is required")
     private String officeLocation;
 }
