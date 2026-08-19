@@ -4,6 +4,7 @@ import com.jhoel.empleados_api.dto.request.DepartmentRequest;
 import com.jhoel.empleados_api.dto.response.DepartmentResponse;
 import com.jhoel.empleados_api.entity.Department;
 import com.jhoel.empleados_api.service.Interfaces.DepartmentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/departments")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class DepartmentController {
 
