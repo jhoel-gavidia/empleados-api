@@ -2,6 +2,7 @@ package com.jhoel.empleados_api.service.Interfaces;
 
 import com.jhoel.empleados_api.dto.request.EmployeeRequest;
 import com.jhoel.empleados_api.dto.response.EmployeeResponse;
+import com.jhoel.empleados_api.dto.response.EmployeeStatisticsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,4 +20,5 @@ public interface EmployeeService {
             BigDecimal maxSalary,
             BigDecimal minSalary,
             Pageable pageable);
+    EmployeeStatisticsResponse getEmployeeStatistics();
 }

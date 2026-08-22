@@ -3,6 +3,7 @@ package com.jhoel.empleados_api.service.Impl;
 import com.jhoel.empleados_api.Specification.EmployeeSpecification;
 import com.jhoel.empleados_api.dto.request.EmployeeRequest;
 import com.jhoel.empleados_api.dto.response.EmployeeResponse;
+import com.jhoel.empleados_api.dto.response.EmployeeStatisticsResponse;
 import com.jhoel.empleados_api.entity.Department;
 import com.jhoel.empleados_api.entity.Employee;
 import com.jhoel.empleados_api.exception.NotFoundException;
@@ -142,5 +143,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
         return spec;
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @Override
+    public EmployeeStatisticsResponse getEmployeeStatistics() {
+
+        Object[] statistics = employeeRepository.getEmployeeStatistics();
+
+        long totalEmployees = ((Number) statistics[0]).longValue();
+
+        BigDecimal averageSalary = (BigDecimal) statistics[1];
+
+        BigDecimal maxSalary = (BigDecimal) statistics[2];
+
+        long totalDepartments = departmentRepository.count();
+
+        return new EmployeeStatisticsResponse(
+                totalEmployees,
+                totalDepartments,
+                averageSalary,
+                maxSalary
+        );
     }
 }

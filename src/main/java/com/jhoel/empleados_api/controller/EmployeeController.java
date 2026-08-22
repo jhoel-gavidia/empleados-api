@@ -2,6 +2,7 @@ package com.jhoel.empleados_api.controller;
 
 import com.jhoel.empleados_api.dto.request.EmployeeRequest;
 import com.jhoel.empleados_api.dto.response.EmployeeResponse;
+import com.jhoel.empleados_api.dto.response.EmployeeStatisticsResponse;
 import com.jhoel.empleados_api.service.Interfaces.EmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -32,6 +33,11 @@ public class EmployeeController {
         URI location = URI.create("/api/employees/" + response.getId());
 
         return ResponseEntity.created(location).body(response);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<EmployeeStatisticsResponse> getEmployeeStatistics() {
+        return ResponseEntity.ok(employeeService.getEmployeeStatistics());
     }
 
     @GetMapping("/{id}")

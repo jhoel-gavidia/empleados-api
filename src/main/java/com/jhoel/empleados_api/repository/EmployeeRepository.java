@@ -5,8 +5,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee> {
     Page<Employee> findByFirstNameContainingIgnoreCase(String firstName, Pageable pageable);
+
+    @Query("""
+            SELECT
+                COUNT(e),
+                COALESCE(AVG(e.salary), 0),
+                COALESCE(MAX(e.salary), 0)
+            FROM Employee e
+            """)
+    Object[] getEmployeeStatistics();
 }
