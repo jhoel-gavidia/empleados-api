@@ -10,6 +10,7 @@ import com.jhoel.empleados_api.exception.NotFoundException;
 import com.jhoel.empleados_api.mapper.EmployeeMapper;
 import com.jhoel.empleados_api.repository.DepartmentRepository;
 import com.jhoel.empleados_api.repository.EmployeeRepository;
+import com.jhoel.empleados_api.repository.EmployeeStatisticsProjection;
 import com.jhoel.empleados_api.service.Interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -149,13 +150,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeStatisticsResponse getEmployeeStatistics() {
 
-        Object[] statistics = employeeRepository.getEmployeeStatistics();
+        EmployeeStatisticsProjection statistics =
+                employeeRepository.getEmployeeStatistics();
 
-        long totalEmployees = ((Number) statistics[0]).longValue();
+        long totalEmployees = statistics.getTotalEmployees();
 
-        BigDecimal averageSalary = (BigDecimal) statistics[1];
+        BigDecimal averageSalary = statistics.getAverageSalary();
 
-        BigDecimal maxSalary = (BigDecimal) statistics[2];
+        BigDecimal maxSalary = statistics.getMaxSalary();
 
         long totalDepartments = departmentRepository.count();
 

@@ -12,11 +12,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
     Page<Employee> findByFirstNameContainingIgnoreCase(String firstName, Pageable pageable);
 
     @Query("""
-            SELECT
-                COUNT(e),
-                COALESCE(AVG(e.salary), 0),
-                COALESCE(MAX(e.salary), 0)
-            FROM Employee e
-            """)
-    Object[] getEmployeeStatistics();
+        SELECT
+            COUNT(e) AS totalEmployees,
+            COALESCE(AVG(e.salary), 0) AS averageSalary,
+            COALESCE(MAX(e.salary), 0) AS maxSalary
+        FROM Employee e
+        """)
+    EmployeeStatisticsProjection getEmployeeStatistics();
 }
